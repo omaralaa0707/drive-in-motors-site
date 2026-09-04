@@ -250,12 +250,12 @@ function CarEntry({ car, index }: { car: Car; index: number }) {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,0.78fr)_minmax(0,1.22fr)] lg:gap-12">
         <div>
           <div className="label">{String(index + 1).padStart(2, "0")}</div>
-          <h3 className="latin sign mt-2 text-[1.9rem] text-ice">{title}</h3>
+          <h3 className="latin signmark mt-2 text-[1.9rem] text-ice">{title}</h3>
           <div className="mt-3 flex flex-wrap items-center gap-2">
-            <span className="chip border border-beam px-2.5 py-1 text-beam">
+            <span className="chip chip-loc border border-beam px-2.5 py-1 text-beam">
               {c.floor.newLabel}
             </span>
-            <span className="chip border border-night-3 px-2.5 py-1 text-steel">
+            <span className="chip chip-loc border border-night-3 px-2.5 py-1 text-steel">
               {c.floor.sourceLabels[car.from]}
             </span>
           </div>

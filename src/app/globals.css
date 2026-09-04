@@ -209,6 +209,16 @@ html[dir="rtl"] .m-head-wide { max-width: 40ch; }
   unicode-bidi: plaintext;
 }
 
+/* A chip whose text is translated is not Latin signage: under RTL it takes the
+   Arabic body face, loses the tracking that breaks Arabic joins, and sizes up
+   to match .label. Kept separate from .chip, which carries marque names that
+   stay Latin in both locales. */
+html[dir="rtl"] .chip-loc {
+  font-family: var(--font-arabic-body);
+  letter-spacing: 0;
+  font-size: 0.82rem;
+}
+
 /* Direction resolved from the content, alignment taken from the page. */
 .bidi { unicode-bidi: plaintext; }
 html[dir="rtl"] .bidi { text-align: right; }
