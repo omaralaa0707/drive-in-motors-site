@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 88 100" role="img" aria-label="Drive In Motors">
+  <!-- Their mark, redrawn from the channel-letter sign over their shopfront:
+       three nested round-capped strokes, each a bar that turns through a
+       half-circle and comes back — a D built out of tyre tracks. -->
+  <g fill="none" stroke="#f0a32a" stroke-width="10" stroke-linecap="round">
+    <path d="M12,20 H46 A30,30 0 0 1 46,80 H12" />
+    <path d="M24,34 H46 A16,16 0 0 1 46,66 H24" />
+    <path d="M34,45 H45 A5,5 0 0 1 45,55 H34" />
+  </g>
+</svg>
