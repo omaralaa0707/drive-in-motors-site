@@ -38,14 +38,23 @@
 @layer base {
   section[id] { scroll-margin-top: 5.5rem; }
 
+  /* A block turning on the Y axis under a 1400px perspective projects WIDER
+     than its layout box while the near edge is toward the reader, so every
+     reveal briefly overhangs the viewport — 38px of it on a 390px phone in
+     RTL, where the near edge is the left one. `overflow-x: hidden` on body
+     alone does not contain it: with html visible, body's overflow propagates
+     to the viewport and body itself computes back to visible. `clip` on both
+     contains it and, unlike `hidden`, creates no scroll container, so the
+     sticky header still resolves against the viewport. */
   html {
     background: var(--color-night);
     color: var(--color-ice);
     -webkit-font-smoothing: antialiased;
     scroll-behavior: auto;
+    overflow-x: clip;
   }
 
-  body { font-family: var(--font-body); overflow-x: hidden; }
+  body { font-family: var(--font-body); overflow-x: clip; }
   html[dir="rtl"] body { font-family: var(--font-arabic-body); }
 
   ::selection { background: var(--color-amber); color: var(--color-night); }
