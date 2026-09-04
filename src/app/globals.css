@@ -228,6 +228,18 @@ html[dir="rtl"] .chip-loc {
   font-size: 0.82rem;
 }
 
+/* three.js writes an inline pixel size onto the canvas from whatever its
+   container measured when the renderer last sized itself. A later layout pass
+   — fonts arriving, the aspect-ratio box settling — leaves that size stale and
+   the canvas overhangs its parent by however much the box changed. Inline
+   styles outrank the sheet, so this has to be !important: CSS owns the box,
+   the renderer owns only the drawing buffer. */
+.lens-host canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 /* Direction resolved from the content, alignment taken from the page. */
 .bidi { unicode-bidi: plaintext; }
 html[dir="rtl"] .bidi { text-align: right; }

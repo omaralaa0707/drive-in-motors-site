@@ -282,7 +282,7 @@ export function LensArray({
   }
 
   return (
-    <div ref={hostRef} className={className} role="img" aria-label={alt}>
+    <div ref={hostRef} className={`lens-host ${className ?? ""}`} role="img" aria-label={alt}>
       <Canvas
         style={{
           width: "100%",

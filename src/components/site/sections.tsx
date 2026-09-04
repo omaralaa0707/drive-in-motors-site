@@ -178,7 +178,7 @@ function Hero() {
         </Turn>
 
         <div className="mt-6 grid items-start gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-14">
-          <div>
+          <div className="min-w-0">
             <Turn as="h1" className="text-hero sign m-hero text-ice" delay={60}>
               {c.hero.headline}
             </Turn>
@@ -201,7 +201,11 @@ function Hero() {
             </Turn>
           </div>
 
-          <div>
+          {/* min-w-0: the WebGL canvas is a replaced element whose intrinsic
+              (drawing-buffer) width becomes this grid item's automatic minimum
+              size, which forced the single-column mobile track ~40px past the
+              container. minmax(0,…) does the same job for the desktop columns. */}
+          <div className="min-w-0">
             <Turn delay={100} className="relative aspect-[4/5] w-full border border-night-3">
               <LensArray
                 sources={LENTICULAR.map((l) => l.src)}
