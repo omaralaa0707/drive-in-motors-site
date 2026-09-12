@@ -138,25 +138,17 @@ html[dir="rtl"] .label {
 
 @keyframes turn-in {
   from {
-    transform: perspective(1400px) rotateY(var(--turn-from, -22deg)) translateZ(-24px);
+    transform: translateY(18px);
     opacity: 0;
   }
-  60% { opacity: 1; }
-  to { transform: perspective(1400px) rotateY(0deg) translateZ(0); opacity: 1; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
-[data-turn] { perspective: 1400px; }
 [data-turn] > [data-turn-inner] {
-  transform-origin: left center;
-  backface-visibility: hidden;
   opacity: 0;
 }
-html[dir="rtl"] [data-turn] > [data-turn-inner] {
-  transform-origin: right center;
-  --turn-from: 22deg;
-}
 [data-turn][data-seen] > [data-turn-inner] {
-  animation: turn-in 760ms var(--ease-turn) var(--turn-delay, 0ms) both;
+  animation: turn-in 450ms var(--ease-turn) var(--turn-delay, 0ms) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

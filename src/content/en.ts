@@ -135,9 +135,7 @@ export const en: DriveInContent = {
   },
 
   footer: {
-    disclaimer:
-      "A concept design, built as a demonstration. Not an official Drive In Motors site and not affiliated with them. All photography, marks and quoted copy belong to Drive In Motors; captions are quoted as published.",
-    rights: "Concept by Claude",
+    rights: "© Drive In Motors. All rights reserved.",
   },
 
   a11y: {

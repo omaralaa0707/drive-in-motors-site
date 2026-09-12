@@ -534,7 +534,6 @@ export function Footer() {
           <Mark className="h-5 w-[1.1rem] shrink-0 text-amber" />
           <span className="signmark text-[0.95rem] text-ice">{c.brand.shortName}</span>
         </div>
-        <p className="fine max-w-[58ch] text-steel">{c.footer.disclaimer}</p>
         <p className="fine shrink-0 text-steel">{c.footer.rights}</p>
       </div>
     </footer>

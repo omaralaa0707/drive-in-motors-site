@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Antonio, Commissioner, Alyamama, Estedad } from "next/font/google";
 import "./globals.css";
 import { LocaleProvider } from "@/i18n/locale-provider";
-import { ScrollProvider } from "@/components/motion/scroll-provider";
 import { ar } from "@/content/ar";
 import { en } from "@/content/en";
 
@@ -38,7 +37,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Drive In Motors — everything on this floor is new",
     description:
-      "A concept site built from their own kerbside photography: Jetour, Kaiyi, Changan and Skoda, all Model 2026, all available now.",
+      "Four brand-new cars from Jetour, Kaiyi, Changan and Skoda, all Model 2026, photographed at the showroom. Available now.",
     locale: "en_US",
     type: "website",
   },
@@ -63,7 +62,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
           <style>{`[data-turn-inner]{opacity:1!important;transform:none!important;animation:none!important}`}</style>
         </noscript>
         <LocaleProvider dictionaries={{ ar, en }} defaultLocale="en">
-          <ScrollProvider />
           {children}
         </LocaleProvider>
       </body>

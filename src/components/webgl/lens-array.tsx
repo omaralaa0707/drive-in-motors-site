@@ -127,14 +127,17 @@ function makeUniforms() {
 function Array3({
   textures,
   angle,
+  isVisible,
 }: {
   textures: THREE.Texture[];
   angle: React.RefObject<number>;
+  isVisible: React.RefObject<boolean>;
 }) {
   const size = useThree((s) => s.size);
   const dpr = useThree((s) => s.viewport.dpr);
   const matRef = useRef<THREE.ShaderMaterial>(null);
   const [uniforms] = useState(makeUniforms);
+  const firstFrameRef = useRef(true);
 
   useEffect(() => {
     const m = matRef.current;
@@ -156,8 +159,17 @@ function Array3({
   }, [size, dpr]);
 
   useFrame((_, delta) => {
+    // Pause animation when element is not visible
+    if (!isVisible.current) return;
+
     const m = matRef.current;
     if (!m) return;
+
+    // Mark that we've rendered the first frame
+    if (firstFrameRef.current) {
+      firstFrameRef.current = false;
+    }
+
     const d = Math.min(delta, 0.05);
     m.uniforms.uTime.value += d;
     const target = angle.current;
@@ -205,14 +217,57 @@ export function LensArray({
   const [supported, setSupported] = useState<boolean | null>(null);
   const [textures, setTextures] = useState<THREE.Texture[] | null>(null);
   const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const hostRef = useRef<HTMLDivElement>(null);
   const angle = useRef(0);
+  const isVisible = useRef(true);
 
   useEffect(() => {
     // A capability probe cannot leave the effect: reading `window` in a lazy
     // initialiser makes the first client render disagree with the HTML.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSupported(canRenderWebgl());
+    setPrefersReducedMotion(
+      typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }, []);
+
+  // Lazy-mount via IntersectionObserver (~300px threshold) and track visibility
+  useEffect(() => {
+    const node = hostRef.current;
+    if (!node) return;
+
+    let mountIo: IntersectionObserver | null = null;
+    let visibilityIo: IntersectionObserver | null = null;
+
+    // First IO: mount when approaching viewport
+    mountIo = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) {
+          setMounted(true);
+          // After mounting, use visibility IO to track if it's actually visible
+          if (visibilityIo) visibilityIo.observe(node);
+          if (mountIo) mountIo.disconnect();
+        }
+      },
+      { rootMargin: "300px", threshold: 0.01 }
+    );
+
+    // Second IO: track visibility for pausing off-screen animation
+    visibilityIo = new IntersectionObserver(
+      ([e]) => {
+        isVisible.current = e.isIntersecting;
+      },
+      { threshold: 0.01 }
+    );
+
+    mountIo.observe(node);
+    return () => {
+      mountIo?.disconnect();
+      visibilityIo?.disconnect();
+    };
   }, []);
 
   // Loaded here rather than through a hook so the colour space can be set on
@@ -272,9 +327,20 @@ export function LensArray({
     };
   }, []);
 
-  if (lost || supported !== true || !textures) {
+  // Use fallback if WebGL is not supported, lost, textures not loaded, or reduced motion is preferred
+  if (lost || supported !== true || !textures || prefersReducedMotion) {
     return (
       <div className={className}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={fallback} alt={alt} className="h-full w-full object-cover" />
+      </div>
+    );
+  }
+
+  // Don't mount Canvas until element is near viewport (~300px)
+  if (!mounted) {
+    return (
+      <div ref={hostRef} className={className}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={fallback} alt={alt} className="h-full w-full object-cover" />
       </div>
@@ -288,17 +354,18 @@ export function LensArray({
           width: "100%",
           height: "100%",
           opacity: ready ? 1 : 0,
-          transition: "opacity 800ms ease",
+          transition: "opacity 450ms ease-out",
         }}
         dpr={[1, 2]}
         gl={{ antialias: false, alpha: false }}
         onCreated={({ gl }) => {
           bind(gl.domElement);
-          setReady(true);
+          // Fade in after first frame renders
+          setTimeout(() => setReady(true), 0);
         }}
       >
         <Suspense fallback={null}>
-          <Array3 textures={textures} angle={angle} />
+          <Array3 textures={textures} angle={angle} isVisible={isVisible} />
         </Suspense>
       </Canvas>
     </div>
